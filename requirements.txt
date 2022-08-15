@@ -1,0 +1,3 @@
+pyannote.audio==1.1.2
+pydub==0.25.1
+nemo_toolkit['all']
