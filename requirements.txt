@@ -1,3 +1,17 @@
+# generic
+clean-py==0.5
+tqdm==4.64.0
+pandas==1.4.3
+
+# podcast scraping
+mutagen==1.45.1
+beautifulsoup4==4.11.1
+mutagen==1.45.1
+beautifulsoup4==4.11.1
+tqdm==4.64.0
+ftfy==6.1.1
+
+# ASR
 pyannote.audio==1.1.2
 pydub==0.25.1
 nemo_toolkit['all']
