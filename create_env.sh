@@ -18,6 +18,12 @@ echo "Add git config"
 git config --global user.name "Sam Hardy"
 git config --global user.email "samhardyhey@gmail.com"
 
+echo "Clone/install ctc decode"
+git clone --recursive https://github.com/parlance/ctcdecode.git && cd ctcdecode && pip install .
+
+echo "Install nemo toolkit"
+pip install nemo_toolkit['all']
+
 echo "Installing low-level audio libraries"
 apt-get update -y
 apt-get install libsndfile1 -y

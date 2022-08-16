@@ -6,12 +6,11 @@ pandas==1.4.3
 # podcast scraping
 mutagen==1.45.1
 beautifulsoup4==4.11.1
-mutagen==1.45.1
-beautifulsoup4==4.11.1
-tqdm==4.64.0
 ftfy==6.1.1
 
 # ASR
-pyannote.audio==1.1.2
+# pyannote.audio==1.1.2
 pydub==0.25.1
-nemo_toolkit['all']
+transformers==4.21.1
+torchaudio==0.12.1
+numpy==1.22
