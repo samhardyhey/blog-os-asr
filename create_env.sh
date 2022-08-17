@@ -5,14 +5,16 @@ conda config --set auto_activate_base false
 # eval "$(conda shell.bash hook)"
 # conda activate p38
 
-echo "Installing project requirements"
-pip install -r ./requirements.txt
-
 echo "Install pyannote.audio"
-pip install pyannote.audio==1.1.2
+# bypass hard torch pins, install first; yikes
+pip install pyannote.audio==2.0.1
+pip install pyannote.pipeline==2.3
 
 echo "Installing torch/conda binaries"
 conda install pytorch torchvision -c pytorch -y
+
+echo "Installing project requirements"
+pip install -r ./requirements.txt
 
 echo "Testing torch installation"
 python -c 'import torch; print(torch.cuda.is_available()); print(torch.cuda.device_count())'
