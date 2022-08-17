@@ -9,7 +9,6 @@ beautifulsoup4==4.11.1
 ftfy==6.1.1
 
 # ASR
-# pyannote.audio==1.1.2
 pydub==0.25.1
 transformers==4.21.1
 torchaudio==0.12.1
