@@ -16,6 +16,11 @@ pip install nemo_toolkit['all']
 echo "Installing project requirements"
 pip install -r ./requirements.txt
 
+echo "Installing torch/conda binaries"
+# pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
+conda remove pytorch torchvision torchaudio -y # silly jarvis env
+conda install pytorch torchvision torchaudio -c pytorch -y
+
 echo "Clone/install ctc decode"
 if [ -d "ctcdecode" ]; then
   cd ctcdecode && pip install .
@@ -23,15 +28,10 @@ else
   git clone --recursive https://github.com/parlance/ctcdecode.git && cd ctcdecode && pip install .
 fi
 
-echo "Installing torch/conda binaries"
-# pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
-conda remove pytorch torchvision torchaudio -y # silly jarvis env
-conda install pytorch torchvision torchaudio -c pytorch -y
-
 echo "Testing torch installation"
 python -c 'import torch; print(torch.cuda.is_available()); print(torch.cuda.device_count())'
 
-echo "Correct numpy version, truly in dependency hell"
+echo "Correct numpy version, truly in dependency hell now"
 pip install numpy==1.22
 
 echo "Add git config"
@@ -41,5 +41,5 @@ git config --global user.email "samhardyhey@gmail.com"
 echo "Installing low-level audio libraries"
 apt-get update -y
 apt-get install libsndfile1 -y
-export TZ=Australia/Brisbane
+apt-get install libstdc++6 -y
 apt install ffmpeg -y
