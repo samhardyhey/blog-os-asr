@@ -4,16 +4,14 @@ tqdm==4.64.0
 pandas==1.4.3
 
 # podcast scraping
-mutagen==1.45.1
+pydub==0.25.1
 beautifulsoup4==4.11.1
 ftfy==6.1.1
 
 # ASR
-pydub==0.25.1
 transformers==4.21.1
 nemo-toolkit==1.10.0
 pyannote.audio==2.0.1
 pyannote.pipeline==2.3
 numpy==1.22
-
-# torchaudio==0.12.1
+nvsmi==0.4.2

@@ -133,8 +133,8 @@ def create_manifest(
         transcript_records.append(
             {
                 "transcript": transcript_text,
-                "len_seconds": MP3(audio).info.length,
-                "len_minutes": MP3(audio).info.length / 60,
+                "len_seconds": AudioSegment.from_mp3(audio).duration_seconds,
+                "len_minutes": AudioSegment.from_mp3(audio).duration_seconds / 60,
                 "audio_path": audio.resolve(),
                 "transcript_path": transcript.resolve(),
             }
