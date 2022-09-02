@@ -17,16 +17,8 @@ echo "Installing project requirements"
 pip install -r ./requirements.txt
 
 echo "Installing torch/conda binaries"
-# pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu116
 conda remove pytorch torchvision torchaudio -y # silly jarvis env
 conda install pytorch torchvision torchaudio -c pytorch -y
-
-echo "Clone/install ctc decode"
-if [ -d "ctcdecode" ]; then
-  cd ctcdecode && pip install .
-else
-  git clone --recursive https://github.com/parlance/ctcdecode.git && cd ctcdecode && pip install .
-fi
 
 echo "Testing torch installation"
 python -c 'import torch; print(torch.cuda.is_available()); print(torch.cuda.device_count())'
