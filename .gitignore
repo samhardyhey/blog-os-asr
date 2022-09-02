@@ -1,5 +1,4 @@
-temp_dir/
-ctcdecode/
+output/
 .vscode/
 *.venv/
 __pycache__/

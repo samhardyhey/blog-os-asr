@@ -15,3 +15,4 @@ pyannote.audio==2.0.1
 pyannote.pipeline==2.3
 numpy==1.22
 nvsmi==0.4.2
+jiwer==2.3.0
