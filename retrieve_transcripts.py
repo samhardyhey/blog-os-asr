@@ -144,11 +144,13 @@ def create_manifest(
         pd.DataFrame(transcript_records)
         .assign(stem=lambda x: x.audio_path.apply(lambda y: y.stem))
         .assign(
-            transcript_len=lambda x: x.transcript.apply(lambda y: len(y.split(" ")))
+            transcript_len=lambda x: x.transcript.apply(
+                lambda y: len(y.split(" ")))
         )
         .query("len_minutes >= @podcast_min_len & len_minutes <= @podcast_max_len")
         .assign(
-            wpm=lambda x: x.apply(lambda y: y.transcript_len / y.len_minutes, axis=1)
+            wpm=lambda x: x.apply(
+                lambda y: y.transcript_len / y.len_minutes, axis=1)
         )
     )
 
@@ -177,11 +179,13 @@ def prune_transcripts_not_in_manifest(
 if __name__ == "__main__":
     # seperate output dirs for audio/transcripts
     OUTPUT_BASE_DIR = Path("./output")
-    audio_output_dir = OUTPUT_BASE_DIR / "radio_national_podcasts/audio"
+    shutil.rmtree(str(OUTPUT_BASE_DIR)) if OUTPUT_BASE_DIR.exists() else None
+    audio_output_dir = OUTPUT_BASE_DIR / "radio_national_podcasts/audio/mp3"
     shutil.rmtree(str(audio_output_dir)) if audio_output_dir.exists() else None
     audio_output_dir.mkdir(parents=True)
 
-    transcript_output_dir = OUTPUT_BASE_DIR / "radio_national_podcasts/transcripts"
+    transcript_output_dir = OUTPUT_BASE_DIR / \
+        "radio_national_podcasts/transcripts/ground_truth"
     shutil.rmtree(
         str(transcript_output_dir)
     ) if transcript_output_dir.exists() else None
@@ -194,7 +198,8 @@ if __name__ == "__main__":
     podcast_page_urls = get_podcast_page_urls(PAGE_URL, BASE_URL)
 
     for podcast_page_url in tqdm(
-        podcast_page_urls, desc=f"Downloading podcasts/transcripts for {PAGE_URL}"
+        podcast_page_urls[:
+                          5], desc=f"Downloading podcasts/transcripts for {PAGE_URL}"
     ):
         res = requests.get(podcast_page_url)
         soup = BeautifulSoup(res.content, "html.parser")
@@ -208,13 +213,16 @@ if __name__ == "__main__":
         transcript_cleaned = remove_transcript_artefacts(transcript_rough)
 
         with open(
-            transcript_output_dir / f"{Path(podcast_page_url).parents[0].name}.txt", "w"
+            transcript_output_dir /
+                f"{Path(podcast_page_url).parents[0].name}.txt", "w"
         ) as f:
             f.write(transcript_cleaned)
 
     prune_pairless_transcripts(audio_output_dir, transcript_output_dir)
     TRANSCRIPT_LOGGER.info("Pruned pairless audio/transcripts")
     manifest = create_manifest(audio_output_dir, transcript_output_dir)
-    manifest.to_csv(audio_output_dir.parents[0] / "manifest.csv", index=False)
-    prune_transcripts_not_in_manifest(manifest, audio_output_dir, transcript_output_dir)
+    manifest.to_csv(OUTPUT_BASE_DIR /
+                    "radio_national_podcasts/manifest.csv", index=False)
+    prune_transcripts_not_in_manifest(
+        manifest, audio_output_dir, transcript_output_dir)
     TRANSCRIPT_LOGGER.info("Removed audio transcripts present within manifest")
