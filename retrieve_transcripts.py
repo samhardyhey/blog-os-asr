@@ -17,11 +17,7 @@ def get_podcast_page_urls(page_url, base_url):
     res = requests.get(page_url)
     soup = BeautifulSoup(res.content, "html.parser")
 
-    podcast_page_urls = []
-    for a in soup.find_all("a", href=True):
-        if "/radionational/programs" in a["href"] and len(Path(a["href"]).parts) > 3:
-            podcast_page_urls.append(f"{base_url}{a['href']}")
-    return podcast_page_urls
+    return [f"{base_url}{a['href']}" for a in soup.find_all("a", href=True) if "/radionational/programs" in a["href"] and len(Path(a["href"]).parts) > 3]
 
 
 def get_podcast_mp3_link(page_soup):
@@ -220,7 +216,10 @@ if __name__ == "__main__":
 
     prune_pairless_transcripts(audio_output_dir, transcript_output_dir)
     TRANSCRIPT_LOGGER.info("Pruned pairless audio/transcripts")
-    manifest = create_manifest(audio_output_dir, transcript_output_dir)
+    PODCAST_MIN_LEN = 5
+    PODCAST_MAX_LEN = 15
+    manifest = create_manifest(audio_output_dir, transcript_output_dir,
+                               podcast_min_len=PODCAST_MIN_LEN, podcast_max_len=PODCAST_MAX_LEN)
     manifest.to_csv(OUTPUT_BASE_DIR /
                     "radio_national_podcasts/manifest.csv", index=False)
     prune_transcripts_not_in_manifest(
