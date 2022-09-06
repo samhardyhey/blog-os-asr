@@ -194,8 +194,7 @@ if __name__ == "__main__":
     podcast_page_urls = get_podcast_page_urls(PAGE_URL, BASE_URL)
 
     for podcast_page_url in tqdm(
-        podcast_page_urls[:
-                          5], desc=f"Downloading podcasts/transcripts for {PAGE_URL}"
+        podcast_page_urls, desc=f"Downloading podcasts/transcripts for {PAGE_URL}"
     ):
         res = requests.get(podcast_page_url)
         soup = BeautifulSoup(res.content, "html.parser")
