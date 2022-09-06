@@ -1,6 +1,6 @@
 import logging
 import os
-import shutil
+import tempfile
 from pathlib import Path
 
 import nemo.collections.asr as nemo_asr
@@ -8,7 +8,6 @@ import pandas as pd
 from nemo.collections.nlp.models import PunctuationCapitalizationModel
 from pyannote.audio import Pipeline
 from pydub import AudioSegment, silence, utils
-import tempfile
 
 logging.getLogger("nemo_logger").setLevel(logging.ERROR)
 ASR_LOGGER = logging.getLogger("asr")
@@ -212,7 +211,9 @@ def transcribe_mono_audio(input_file, single_speaker=False):
         ASR_LOGGER.info("Successfully processed segments with ASR model")
 
         return pd.DataFrame(
-            chunked_diarized_segments.assign(segment_marker=lambda x: x.speaker.shift(1))
+            chunked_diarized_segments.assign(
+                segment_marker=lambda x: x.speaker.shift(1)
+            )
             .assign(segment_marker=lambda x: x.segment_marker != x.speaker)
             .assign(segment_marker=lambda x: pd.Series.cumsum(x.segment_marker))
             .groupby("segment_marker")

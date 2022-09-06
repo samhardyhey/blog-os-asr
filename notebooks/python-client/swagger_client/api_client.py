@@ -21,8 +21,9 @@ from multiprocessing.pool import ThreadPool
 
 # python 2 and python 3 compatibility library
 import six
-import swagger_client.models
 from six.moves.urllib.parse import quote
+
+import swagger_client.models
 from swagger_client import rest
 from swagger_client.configuration import Configuration
 

@@ -17,7 +17,11 @@ def get_podcast_page_urls(page_url, base_url):
     res = requests.get(page_url)
     soup = BeautifulSoup(res.content, "html.parser")
 
-    return [f"{base_url}{a['href']}" for a in soup.find_all("a", href=True) if "/radionational/programs" in a["href"] and len(Path(a["href"]).parts) > 3]
+    return [
+        f"{base_url}{a['href']}"
+        for a in soup.find_all("a", href=True)
+        if "/radionational/programs" in a["href"] and len(Path(a["href"]).parts) > 3
+    ]
 
 
 def get_podcast_mp3_link(page_soup):
@@ -140,13 +144,11 @@ def create_manifest(
         pd.DataFrame(transcript_records)
         .assign(stem=lambda x: x.audio_path.apply(lambda y: y.stem))
         .assign(
-            transcript_len=lambda x: x.transcript.apply(
-                lambda y: len(y.split(" ")))
+            transcript_len=lambda x: x.transcript.apply(lambda y: len(y.split(" ")))
         )
         .query("len_minutes >= @podcast_min_len & len_minutes <= @podcast_max_len")
         .assign(
-            wpm=lambda x: x.apply(
-                lambda y: y.transcript_len / y.len_minutes, axis=1)
+            wpm=lambda x: x.apply(lambda y: y.transcript_len / y.len_minutes, axis=1)
         )
     )
 
@@ -180,8 +182,9 @@ if __name__ == "__main__":
     shutil.rmtree(str(audio_output_dir)) if audio_output_dir.exists() else None
     audio_output_dir.mkdir(parents=True)
 
-    transcript_output_dir = OUTPUT_BASE_DIR / \
-        "radio_national_podcasts/transcripts/ground_truth"
+    transcript_output_dir = (
+        OUTPUT_BASE_DIR / "radio_national_podcasts/transcripts/ground_truth"
+    )
     shutil.rmtree(
         str(transcript_output_dir)
     ) if transcript_output_dir.exists() else None
@@ -208,8 +211,7 @@ if __name__ == "__main__":
         transcript_cleaned = remove_transcript_artefacts(transcript_rough)
 
         with open(
-            transcript_output_dir /
-                f"{Path(podcast_page_url).parents[0].name}.txt", "w"
+            transcript_output_dir / f"{Path(podcast_page_url).parents[0].name}.txt", "w"
         ) as f:
             f.write(transcript_cleaned)
 
@@ -217,10 +219,14 @@ if __name__ == "__main__":
     TRANSCRIPT_LOGGER.info("Pruned pairless audio/transcripts")
     PODCAST_MIN_LEN = 5
     PODCAST_MAX_LEN = 15
-    manifest = create_manifest(audio_output_dir, transcript_output_dir,
-                               podcast_min_len=PODCAST_MIN_LEN, podcast_max_len=PODCAST_MAX_LEN)
-    manifest.to_csv(OUTPUT_BASE_DIR /
-                    "radio_national_podcasts/manifest.csv", index=False)
-    prune_transcripts_not_in_manifest(
-        manifest, audio_output_dir, transcript_output_dir)
+    manifest = create_manifest(
+        audio_output_dir,
+        transcript_output_dir,
+        podcast_min_len=PODCAST_MIN_LEN,
+        podcast_max_len=PODCAST_MAX_LEN,
+    )
+    manifest.to_csv(
+        OUTPUT_BASE_DIR / "radio_national_podcasts/manifest.csv", index=False
+    )
+    prune_transcripts_not_in_manifest(manifest, audio_output_dir, transcript_output_dir)
     TRANSCRIPT_LOGGER.info("Removed audio transcripts present within manifest")
