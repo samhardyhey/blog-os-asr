@@ -1,5 +1,5 @@
 ## OS ASR
-Notebooks and scripts for the transcription of audio using open-source tools and models. See the accompanying blog post here.
+Notebooks and scripts for the transcription of audio using open-source tools and models. See the accompanying blog post [here](https://www.samhardyhey.com/poor-mans-asr-pt-2).
 
 ## Install
 - Conda env creation, python dependencies, low-level audio tools via `create_env.sh`
