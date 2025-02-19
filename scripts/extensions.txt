@@ -1,0 +1,11 @@
+christian-kohler.path-intellisense
+mrmlnc.vscode-duplicate
+ms-azuretools.vscode-docker
+ms-python.isort
+ms-python.python
+ms-python.vscode-pylance
+ms-toolsai.jupyter
+ms-toolsai.jupyter-keymap
+ms-vscode.remote-explorer
+shardulm94.trailing-spaces
+sourcery.sourcery

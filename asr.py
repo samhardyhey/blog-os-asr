@@ -3,11 +3,12 @@ import os
 import tempfile
 from pathlib import Path
 
-import nemo.collections.asr as nemo_asr
 import pandas as pd
+from pydub import AudioSegment, silence, utils
+
+import nemo.collections.asr as nemo_asr
 from nemo.collections.nlp.models import PunctuationCapitalizationModel
 from pyannote.audio import Pipeline
-from pydub import AudioSegment, silence, utils
 
 logging.getLogger("nemo_logger").setLevel(logging.ERROR)
 ASR_LOGGER = logging.getLogger("asr")
